@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="jquery.3.2.1.min.js"></script>
+    <script>
+        const maxN = 20;
+        var nMen = 20;
+        var faces = []; // массив, хранящий направление лица каждого солдата (false - направо, true - налево)
+        
+        function window_onLoad() {
+           // initialize();
+           
+        }
+        function initialize() {
+            nMen = parseInt($("#txtN").val());
+            if (nMen > maxN) {
+                alert("No more than 20 men");
+                return;;
+            }
+            faces = [];
+            for (var i = 0; i < nMen; i++)
+            {
+                var j = Math.floor(Math.random() * 2);
+                faces.push(j);
+            }
+            loadImages();
+        }
+        function loadImages() {
+            for (var i = 0; i < maxN; i++) {
+                $("#pic" + i).removeAttr('src');
+            }
+            for (var i = 0; i < nMen; i++) {
+                if (faces[i]==0)
+                    $("#pic" + i).attr("src", "Images\\LeftMan.jpg");
+                else
+                    $("#pic" + i).attr("src", "Images\\RightMan.jpg");
+            }
+            $('#btnStep').prop('disabled', false);
+        }
+        function makeStep() {
+            var newfaces = [];
+            var faceToFaceFound = false;
+           
+                faceToFaceFound = false;
+                newfaces = [...faces];
+                
+            for (var i = 0; i < nMen - 1; i++)
+                {
+                    if (faces[i] == 1 && faces[i + 1] == 0) { // если солдаты стоят лицом к лицу
+                        //faceToFaceFound = true;
+                        newfaces[i] = faces[i + 1];
+                        newfaces[i + 1] = faces[i];
+                        replaceImages(i)
+                    }
+            }
+            //check all pairs 
+            for (var i = 0; i < nMen - 1; i++)
+            {
+                if (newfaces[i] == 1 && newfaces[i + 1] == 0) { // если солдаты стоят лицом к лицу
+                    faceToFaceFound = true;
+                    break;
+                }
+            }
+            if (!faceToFaceFound) {
+                $('#btnStep').prop('disabled', true);
+               
+            }
+                
+            faces = [...newfaces];
+        }
+        function replaceImages(i) {
+            $("#pic" + i).attr("src", "Images\\LeftMan.jpg");
+            $("#pic" + (i+1)).attr("src", "Images\\RightMan.jpg");
+        }
+    </script>
+</head>
+<body onload="window_onLoad()">
+    <div>
+         N солдат выстроены в одну шеренгу (плечом к плечу).
+        По команде «налево» все одновременно повернулись на 90◦, <br />
+        но некоторые повернулись налево, а другие направо. Ровно через секунду <br />
+        каждый, кто оказался теперь  лицом к лицу со своим соседом, поворачивается «кругом»—на 180◦.<br />
+        Ещё через секунду каждый, кто оказался теперь лицом к лицу со своим соседом, поворачивается
+        на 180◦ и т. д. <br />
+        Оказывается, не позже, чем через N-1 шаг не окажется солдат, стоящих лицом к лицу.<br />
+        Проверьте это
+        <hr />
+    </div>
+    <div>
+        N=<input id="txtN" type="text" value="20" />
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <img id="pic0" />
+                </td>
+                <td>
+                    <img id="pic1" />
+                </td>
+                <td>
+                    <img id="pic2" />
+                </td>
+                <td>
+                    <img id="pic3" />
+                </td>
+                <td>
+                    <img id="pic4" />
+                </td>
+                <td>
+                    <img id="pic5" />
+                </td>
+                <td>
+                    <img id="pic6" />
+                </td>
+                <td>
+                    <img id="pic7" />
+                </td>
+                <td>
+                    <img id="pic8" />
+                </td>
+                <td>
+                    <img id="pic9" />
+                </td>
+                <td>
+                    <img id="pic10" />
+                </td>
+                <td>
+                    <img id="pic11" />
+                </td>
+                <td>
+                    <img id="pic12" />
+                </td>
+                <td>
+                    <img id="pic13" />
+                </td>
+                <td>
+                    <img id="pic14" />
+                </td>
+                <td>
+                    <img id="pic15" />
+                </td>
+                <td>
+                    <img id="pic16" />
+                </td>
+                <td>
+                    <img id="pic17" />
+                </td>
+                <td>
+                    <img id="pic18" />
+                </td>
+                <td>
+                    <img id="pic19" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <input id="btnChangeImages" type="button" value="Случайная расстановка" 
+                           onclick="initialize()"/>
+                </td>
+                <td>
+                    <input id="btnStep" type="button" value="Стоящие лицом к лицу - кругом!" 
+                         onclick="makeStep()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
